@@ -8,7 +8,7 @@ npm i react-announce-size --save
 ```
 
 ## Usage
-Say I need to set the width of something that has `position: fixed` equal to that of its parent container
+Say I need to set the width of something that has `position: fixed` equal to that of its parent container. I can do this using this module + the ever-useful [@connect](https://travis-ci.org/tusharmath/react-announce-connect) declarative.
 
 
 ```javascript
