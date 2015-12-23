@@ -10,15 +10,14 @@ const ReactDOM = require('react-dom')
 const Rx = require('rx')
 const Seamless = require('seamless-immutable')
 const _ = require('lodash')
+const Subject = Rx.BehaviorSubject
 
-const getResizeStream = () => Rx.Observable.fromEvent(window, 'resize')
 const defaultParams = {
-  debounce: 0,
-  getResizeStream,
+  getResizeStream: () => Rx.Observable.fromEvent(window, 'resize'),
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
 
-const globalStream = new Rx.BehaviorSubject({})
+const globalStream = new Subject()
 exports.stream = globalStream
 exports.size = createDeclarative(function (componentStream, dispose, params) {
   const i = _.defaults(params, defaultParams)
@@ -26,9 +25,8 @@ exports.size = createDeclarative(function (componentStream, dispose, params) {
   const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
   const didUpdate = componentStream.filter(x => x.event === 'DID_UPDATE')
   const resizeStream = i.getResizeStream().startWith({})
-  sizeStore.getStream()
-    .subscribe(x => globalStream.onNext(x))
   dispose(
+    sizeStore.getStream().subscribe(globalStream),
     Rx.Observable
       .merge(didMount, didUpdate)
       .map(() => i.findDOMNode(this))
