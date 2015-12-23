@@ -1,0 +1,24 @@
+{
+  "name": "react-announce-size",
+  "version": "0.0.0",
+  "description": "a react-announce declarative that exposes component size as a stream",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "tusharmath@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "reactive-storage": "^2.0.1",
+    "rx": "^4.0.7",
+    "seamless-immutable": "^4.1.1"
+  },
+  "peerDependencies": {
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
+  },
+  "devDependencies": {
+    "ava": "^0.8.0"
+  }
+}
