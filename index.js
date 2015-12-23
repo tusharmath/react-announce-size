@@ -19,7 +19,7 @@ const defaultParams = {
 }
 
 const globalStream = new Rx.BehaviorSubject({})
-exports.stream = globalStream.tap(x => console.log)
+exports.stream = globalStream
 exports.size = createDeclarative(function (componentStream, dispose, params) {
   const i = _.defaults(params, defaultParams)
   const sizeStore = createStoreAsStream(new Seamless({id: i.id, top: null, bottom: null, left: null, right: null}))
