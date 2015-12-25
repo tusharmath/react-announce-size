@@ -20,5 +20,24 @@
   "devDependencies": {
     "ava": "^0.8.0"
   },
-  "repository": "https://github.com/tusharmath/react-announce-size"
+  "repository": "https://github.com/tusharmath/react-announce-size",
+  "keywords": [
+    "decorators",
+    "declarative",
+    "react",
+    "rx",
+    "observable",
+    "stream",
+    "framework",
+    "announce",
+    "state",
+    "merge",
+    "extension",
+    "plugin",
+    "size",
+    "getBoundingClientRect",
+    "dom",
+    "resize",
+    "scroll"
+  ]
 }
