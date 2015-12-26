@@ -13,8 +13,9 @@
     "reactive-storage": "^2.0.1",
     "rx": "^4.0.7",
     "seamless-immutable": "^4.1.1",
-    "react-announce": "0.x",
-    "react": "^0.14.3",
+    "react-announce": "0.x"
+  },
+  "peerDependencies": {
     "react-dom": "^0.14.3"
   },
   "devDependencies": {

@@ -21,7 +21,7 @@ const globalStream = new Subject()
 exports.stream = globalStream
 exports.size = createDeclarative(function (componentStream, dispose, params) {
   const i = _.defaults(params, defaultParams)
-  const sizeStore = createStoreAsStream(new Seamless({id: i.id, top: null, bottom: null, left: null, right: null}))
+  const sizeStore = createStoreAsStream(new Seamless({id: i.id}))
   const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
   const didUpdate = componentStream.filter(x => x.event === 'DID_UPDATE')
   const resizeStream = i.getResizeStream().startWith({})
