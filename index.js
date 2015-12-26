@@ -6,7 +6,6 @@
 
 const createDeclarative = require('react-announce').createDeclarative
 const createStoreAsStream = require('reactive-storage').createStoreAsStream
-const ReactDOM = require('react-dom')
 const Rx = require('rx')
 const Seamless = require('seamless-immutable')
 const _ = require('lodash')
@@ -14,7 +13,7 @@ const Subject = Rx.BehaviorSubject
 
 const defaultParams = {
   getResizeStream: () => Rx.Observable.fromEvent(window, 'resize'),
-  findDOMNode: x => ReactDOM.findDOMNode(x)
+  findDOMNode: x => require('react-dom').findDOMNode(x)
 }
 
 const globalStream = new Subject()
