@@ -6,7 +6,7 @@
 import {TestScheduler, ReactiveTest} from 'rx'
 import test from 'ava'
 import _ from 'lodash'
-const {onNext, subscribe} = ReactiveTest
+const {onNext} = ReactiveTest
 
 import {size, stream} from './index'
 
