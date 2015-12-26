@@ -31,6 +31,6 @@ exports.size = createDeclarative(function (componentStream, dispose, params) {
       .merge(didMount, didUpdate)
       .map(() => i.findDOMNode(this))
       .combineLatest(resizeStream, (a, b) => a.getBoundingClientRect())
-      .subscribe(size => sizeStore.update(x => x.merge(_.toPlainObject(size))))
+      .subscribe(size => sizeStore.update(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width'))))
   )
 })
