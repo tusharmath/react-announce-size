@@ -67,20 +67,22 @@ test('unmount', t => {
   })
   const scheduler = new TestScheduler()
   const resize = scheduler.createHotObservable(
-    onNext(100, 1),
-    onNext(200, 2),
-    onNext(300, 3),
-    onNext(400, 4)
+    onNext(100),
+    onNext(200),
+    onNext(300),
+    onNext(500),
+    onNext(600),
+    onNext(700),
+    onNext(800),
+    onNext(900)
   )
-  const m = new (size({debounce: 100, id: 'b', getResizeStream: () => resize, findDOMNode})(noop()))
+  const m = new (size({id: 'b', getResizeStream: () => resize, findDOMNode})(noop()))
   m.componentWillMount()
   m.componentDidMount()
   stream.subscribe(x => out.push(x))
-  scheduler.startScheduler(() => resize.tap(x => {
-    if (x === 3) {
-      m.componentWillUnmount()
-    }
-  }))
+  scheduler.advanceBy(300)
+  m.componentWillUnmount()
+  scheduler.advanceBy(100)
   t.same(out, [
     {id: 'b', top: 100, bottom: 100, left: 100, right: 100},
     {id: 'b', top: 101, bottom: 110, left: 100, right: 500},
