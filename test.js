@@ -52,7 +52,6 @@ test(t => {
   stream.subscribe(x => out.push(x))
   scheduler.startScheduler(() => resize)
   t.same(out, [
-    {id: 'a', top: 100, bottom: 100, left: 100, right: 100},
     {id: 'a', top: 101, bottom: 110, left: 100, right: 500},
     {id: 'a', top: 102, bottom: 120, left: 100, right: 100},
     {id: 'a', top: 103, bottom: 120, left: 100, right: 100}
@@ -84,7 +83,6 @@ test('unmount', t => {
   m.componentWillUnmount()
   scheduler.advanceBy(100)
   t.same(out, [
-    {id: 'b', top: 100, bottom: 100, left: 100, right: 100},
     {id: 'b', top: 101, bottom: 110, left: 100, right: 500},
     {id: 'b', top: 102, bottom: 120, left: 100, right: 100}
   ])

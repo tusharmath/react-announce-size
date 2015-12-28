@@ -10,14 +10,12 @@ const ReactDOM = require('react-dom')
 const Rx = require('rx')
 const Seamless = require('seamless-immutable')
 const _ = require('lodash')
-const Subject = Rx.BehaviorSubject
-
 const defaultParams = {
   getResizeStream: () => Rx.Observable.fromEvent(window, 'resize'),
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
 
-const globalStream = new Subject()
+const globalStream = new Rx.Subject()
 exports.stream = globalStream
 exports.size = createDeclarative(function (componentStream, dispose, params) {
   const i = _.defaults(params, defaultParams)
