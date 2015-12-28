@@ -15,24 +15,24 @@ const defaultParams = {
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
 
-exports.createSizeStore = () => {
-  const sizeStore = createStoreAsStream(new Seamless({}))
-  return {
-    getStream: () => sizeStore.getStream(),
-    update: size => sizeStore.update(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width')))
-  }
-}
-
-exports.size = createDeclarative(function (componentStream, dispose, params) {
+exports.createSizeStore = params => {
   const i = _.defaults(params, defaultParams)
+  const sizeStore = createStoreAsStream(new Seamless({}))
+  const componentStream = new Rx.Subject()
   const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
   const didUpdate = componentStream.filter(x => x.event === 'DID_UPDATE')
   const resizeStream = i.getResizeStream().startWith({})
-  dispose(
-    Rx.Observable
-      .merge(didMount, didUpdate)
-      .map(() => i.findDOMNode(this))
-      .combineLatest(resizeStream, (a, b) => a.getBoundingClientRect())
-      .subscribe(params.store.update)
-  )
-})
+
+  Rx.Observable
+    .merge(didMount, didUpdate)
+    .map(x => i.findDOMNode(x.component))
+    .combineLatest(resizeStream, a => a.getBoundingClientRect())
+    .withLatestFrom(componentStream.pluck('event'), (size, event) => ({size, event}))
+    .filter(x => x.event !== 'WILL_UNMOUNT')
+    .pluck('size')
+    .subscribe(size => sizeStore.update(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width'))))
+  return {
+    getStream: () => sizeStore.getStream().filter(x => x.top),
+    sync: () => componentStream
+  }
+}

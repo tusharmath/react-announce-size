@@ -8,7 +8,7 @@ import test from 'ava'
 import _ from 'lodash'
 const {onNext} = ReactiveTest
 
-import {size, createSizeStore} from './index'
+import {createSizeStore} from './index'
 
 const noop = () => function () {
 }
@@ -20,14 +20,14 @@ const getBoundingClientRectValues = function * () {
   }
   yield * [
     createClientRect({top: 100, bottom: 100, left: 100, right: 100}),
-    createClientRect({top: 101, bottom: 110, left: 100, right: 500}),
-    createClientRect({top: 102, bottom: 120, left: 100, right: 100}),
-    createClientRect({top: 102, bottom: 120, left: 100, right: 100}),
-    createClientRect({top: 103, bottom: 120, left: 100, right: 100}),
-    createClientRect({top: 104, bottom: 120, left: 100, right: 100}),
-    createClientRect({top: 104, bottom: 120, left: 100, right: 100}),
-    createClientRect({top: 105, bottom: 120, left: 100, right: 100}),
-    createClientRect({top: 105, bottom: 120, left: 100, right: 100})
+    createClientRect({top: 101, bottom: 110, left: 101, right: 500}),
+    createClientRect({top: 102, bottom: 120, left: 102, right: 100}),
+    createClientRect({top: 102, bottom: 120, left: 102, right: 100}),
+    createClientRect({top: 103, bottom: 120, left: 104, right: 100}),
+    createClientRect({top: 104, bottom: 120, left: 105, right: 100}),
+    createClientRect({top: 104, bottom: 120, left: 106, right: 100}),
+    createClientRect({top: 105, bottom: 120, left: 107, right: 100}),
+    createClientRect({top: 105, bottom: 120, left: 108, right: 100})
   ]
 }
 const createResizeStream = x => x
@@ -46,17 +46,16 @@ test(t => {
   })
   const scheduler = new TestScheduler()
   const resize = createResizeStream(scheduler)
-  const store = createSizeStore()
-  const m = new (size({store, getResizeStream: () => resize, findDOMNode})(noop()))
-  m.componentWillMount()
-  m.componentDidMount()
+  const store = createSizeStore({getResizeStream: () => resize, findDOMNode})
+  store.sync().onNext({event: 'WILL_MOUNT'})
+  store.sync().onNext({event: 'DID_MOUNT'})
   store.getStream().subscribe(x => out.push(x))
-  scheduler.startScheduler(() => resize)
+  scheduler.start()
   t.same(out, [
     {top: 100, bottom: 100, left: 100, right: 100},
-    {top: 101, bottom: 110, left: 100, right: 500},
-    {top: 102, bottom: 120, left: 100, right: 100},
-    {top: 103, bottom: 120, left: 100, right: 100}
+    {top: 101, bottom: 110, left: 101, right: 500},
+    {top: 102, bottom: 120, left: 102, right: 100},
+    {top: 103, bottom: 120, left: 104, right: 100}
   ])
 })
 
@@ -77,17 +76,21 @@ test('unmount', t => {
     onNext(800),
     onNext(900)
   )
-  const store = createSizeStore()
-  const m = new (size({store, getResizeStream: () => resize, findDOMNode})(noop()))
-  m.componentWillMount()
-  m.componentDidMount()
+  const store = createSizeStore({getResizeStream: () => resize, findDOMNode})
   store.getStream().subscribe(x => out.push(x))
+  store.sync().onNext({event: 'WILL_MOUNT'})
+  store.sync().onNext({event: 'DID_MOUNT'})
   scheduler.advanceBy(300)
-  m.componentWillUnmount()
-  scheduler.advanceBy(100)
+  store.sync().onNext({event: 'WILL_UNMOUNT'})
+  scheduler.advanceBy(300)
+  store.sync().onNext({event: 'WILL_MOUNT'})
+  scheduler.advanceBy(300)
   t.same(out, [
     {top: 100, bottom: 100, left: 100, right: 100},
-    {top: 101, bottom: 110, left: 100, right: 500},
-    {top: 102, bottom: 120, left: 100, right: 100}
+    {top: 101, bottom: 110, left: 101, right: 500},
+    {top: 102, bottom: 120, left: 102, right: 100},
+    {top: 104, bottom: 120, left: 106, right: 100},
+    {top: 105, bottom: 120, left: 107, right: 100},
+    {top: 105, bottom: 120, left: 108, right: 100}
   ])
 })
