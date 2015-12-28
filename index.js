@@ -15,20 +15,24 @@ const defaultParams = {
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
 
-const globalStream = new Rx.Subject()
-exports.stream = globalStream
+exports.createSizeStore = () => {
+  const sizeStore = createStoreAsStream(new Seamless({}))
+  return {
+    getStream: () => sizeStore.getStream(),
+    update: size => sizeStore.update(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width')))
+  }
+}
+
 exports.size = createDeclarative(function (componentStream, dispose, params) {
   const i = _.defaults(params, defaultParams)
-  const sizeStore = createStoreAsStream(new Seamless({id: i.id}))
   const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
   const didUpdate = componentStream.filter(x => x.event === 'DID_UPDATE')
   const resizeStream = i.getResizeStream().startWith({})
   dispose(
-    sizeStore.getStream().subscribe(globalStream),
     Rx.Observable
       .merge(didMount, didUpdate)
       .map(() => i.findDOMNode(this))
       .combineLatest(resizeStream, (a, b) => a.getBoundingClientRect())
-      .subscribe(size => sizeStore.update(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width'))))
+      .subscribe(params.store.update)
   )
 })

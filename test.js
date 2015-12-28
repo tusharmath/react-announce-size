@@ -8,7 +8,7 @@ import test from 'ava'
 import _ from 'lodash'
 const {onNext} = ReactiveTest
 
-import {size, stream} from './index'
+import {size, createSizeStore} from './index'
 
 const noop = () => function () {
 }
@@ -46,15 +46,17 @@ test(t => {
   })
   const scheduler = new TestScheduler()
   const resize = createResizeStream(scheduler)
-  const m = new (size({id: 'a', getResizeStream: () => resize, findDOMNode})(noop()))
+  const store = createSizeStore()
+  const m = new (size({store, getResizeStream: () => resize, findDOMNode})(noop()))
   m.componentWillMount()
   m.componentDidMount()
-  stream.subscribe(x => out.push(x))
+  store.getStream().subscribe(x => out.push(x))
   scheduler.startScheduler(() => resize)
   t.same(out, [
-    {id: 'a', top: 101, bottom: 110, left: 100, right: 500},
-    {id: 'a', top: 102, bottom: 120, left: 100, right: 100},
-    {id: 'a', top: 103, bottom: 120, left: 100, right: 100}
+    {top: 100, bottom: 100, left: 100, right: 100},
+    {top: 101, bottom: 110, left: 100, right: 500},
+    {top: 102, bottom: 120, left: 100, right: 100},
+    {top: 103, bottom: 120, left: 100, right: 100}
   ])
 })
 
@@ -75,15 +77,17 @@ test('unmount', t => {
     onNext(800),
     onNext(900)
   )
-  const m = new (size({id: 'b', getResizeStream: () => resize, findDOMNode})(noop()))
+  const store = createSizeStore()
+  const m = new (size({store, getResizeStream: () => resize, findDOMNode})(noop()))
   m.componentWillMount()
   m.componentDidMount()
-  stream.subscribe(x => out.push(x))
+  store.getStream().subscribe(x => out.push(x))
   scheduler.advanceBy(300)
   m.componentWillUnmount()
   scheduler.advanceBy(100)
   t.same(out, [
-    {id: 'b', top: 101, bottom: 110, left: 100, right: 500},
-    {id: 'b', top: 102, bottom: 120, left: 100, right: 100}
+    {top: 100, bottom: 100, left: 100, right: 100},
+    {top: 101, bottom: 110, left: 100, right: 500},
+    {top: 102, bottom: 120, left: 100, right: 100}
   ])
 })
