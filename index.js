@@ -10,13 +10,15 @@ const ReactDOM = require('react-dom')
 const Rx = require('rx')
 const Seamless = require('seamless-immutable')
 const _ = require('lodash')
+
+// TODO: Add better tests for using global functions
 const defaultParams = {
   getResizeStream: () => Rx.Observable.fromEvent(window, 'resize'),
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
 
 exports.createSizeStore = params => {
-  const i = _.defaults(params, defaultParams)
+  const i = _.defaults({}, params, defaultParams)
   const sizeStore = createStoreAsStream(new Seamless({}))
   const componentStream = new Rx.Subject()
   const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
