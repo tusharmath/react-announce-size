@@ -10,10 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^3.10.1",
-    "reactive-storage": "^2.0.1",
+    "reactive-storage": "0.x",
     "rx": "^4.0.7",
-    "seamless-immutable": "^4.1.1",
-    "react-announce": "0.x"
+    "seamless-immutable": "^4.1.1"
   },
   "peerDependencies": {
     "react-dom": "^0.14.3",

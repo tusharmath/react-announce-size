@@ -4,8 +4,7 @@
 
 'use strict'
 
-const createDeclarative = require('react-announce').createDeclarative
-const createStoreAsStream = require('reactive-storage').createStoreAsStream
+const createStoreAsStream = require('reactive-storage').createStoreStream
 const ReactDOM = require('react-dom')
 const Rx = require('rx')
 const Seamless = require('seamless-immutable')
@@ -32,7 +31,7 @@ exports.createSizeStore = params => {
     .withLatestFrom(componentStream.pluck('event'), (size, event) => ({size, event}))
     .filter(x => x.event !== 'WILL_UNMOUNT')
     .pluck('size')
-    .subscribe(size => sizeStore.update(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width'))))
+    .subscribe(size => sizeStore.set(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width'))))
   return {
     getStream: () => sizeStore.getStream().filter(x => x.top),
     sync: () => componentStream
