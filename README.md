@@ -12,14 +12,16 @@ Say I need to set the width of something that has `position: fixed` equal to tha
 
 
 ```javascript
-import {size, stream as SIZE_STREAM} from 'react-announce-size'
+import {createSizeStream} from 'react-announce-size'
+import {hydrate} from 'react-announce-hydrate'
 import {connect} from 'react-announce-connect'
 import {Component} from 'react'
 
 /*
 The decorator will automatically dispatch the size of `Container` component whenever the screen size changes or the component itself is re-rendered.
 */
-@size({id: 'toolbar'})
+const toolbar = createSizeStream()
+@hydrate([toolbar.sync()])
 class Container extends Component {
   render () {
     return (
@@ -32,7 +34,7 @@ class Container extends Component {
 }
 
 @connect({
-  size: SIZE_STREAM.filter(x => x.id === 'toolbar')
+  size: toolbar.getStream()
 })
 class StickyTop extends Component {
   render () {
