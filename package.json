@@ -9,17 +9,17 @@
   "author": "tusharmath@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^3.10.1",
+    "lodash": "^4.2.0",
     "reactive-storage": "0.x",
     "rx": "^4.0.7",
-    "seamless-immutable": "^4.1.1"
+    "seamless-immutable": "^5.0.1"
   },
   "peerDependencies": {
     "react-dom": "^0.14.3",
     "react": "^0.14.3"
   },
   "devDependencies": {
-    "ava": "^0.8.0",
+    "ava": "^0.11.0",
     "react-dom": "^0.14.3",
     "react": "^0.14.3"
   },
