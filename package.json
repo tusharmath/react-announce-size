@@ -11,14 +11,15 @@
   "dependencies": {
     "lodash": "^3.10.1",
     "reactive-storage": "0.x",
-    "rx": "^4.0.7",
     "seamless-immutable": "^4.1.1"
   },
   "peerDependencies": {
     "react-dom": "^0.14.3",
-    "react": "^0.14.3"
+    "react": "^0.14.3",
+    "rx": "^4.0.7"
   },
   "devDependencies": {
+    "rx": "^4.0.7",
     "ava": "^0.8.0",
     "cz-conventional-changelog": "^1.1.5",
     "react": "^0.14.3",
