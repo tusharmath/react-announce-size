@@ -8,16 +8,22 @@ const createStoreAsStream = require('reactive-storage').createStoreStream
 const ReactDOM = require('react-dom')
 const Rx = require('rx')
 const Seamless = require('seamless-immutable')
-const _ = require('lodash')
 
 // TODO: Add better tests for using global functions
+
 const defaultParams = {
   getResizeStream: () => Rx.Observable.fromEvent(window, 'resize'),
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
-
+const pick = (obj, keys) => {
+  const out = {}
+  keys
+    .filter(x => obj[x])
+    .forEach(x => out[x] = obj[x])
+  return out
+}
 exports.createSizeStore = exports.create = params => {
-  const i = _.defaults({}, params, defaultParams)
+  const i = Object.assign({}, defaultParams, params)
   const sizeStore = createStoreAsStream(new Seamless({}))
   const componentStream = new Rx.Subject()
   const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
@@ -31,7 +37,7 @@ exports.createSizeStore = exports.create = params => {
     .withLatestFrom(componentStream.pluck('event'), (size, event) => ({size, event}))
     .filter(x => x.event !== 'WILL_UNMOUNT')
     .pluck('size')
-    .subscribe(size => sizeStore.set(x => x.merge(_.pick(size, 'top', 'bottom', 'left', 'right', 'height', 'width'))))
+    .subscribe(size => sizeStore.set(x => x.merge(pick(size, ['top', 'bottom', 'left', 'right', 'height', 'width']))))
   return {
     getStream: () => sizeStore.getStream().filter(x => x.top),
     sync: () => componentStream
