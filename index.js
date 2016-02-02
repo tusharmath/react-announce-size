@@ -16,7 +16,7 @@ const defaultParams = {
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
 
-exports.createSizeStore = params => {
+exports.createSizeStore = exports.create = params => {
   const i = _.defaults({}, params, defaultParams)
   const sizeStore = createStoreAsStream(new Seamless({}))
   const componentStream = new Rx.Subject()

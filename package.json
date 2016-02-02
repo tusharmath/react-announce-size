@@ -1,29 +1,33 @@
 {
   "name": "react-announce-size",
-  "version": "0.0.11",
   "description": "a react-announce declarative that exposes component size as a stream",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/ava/cli.js"
+    "test": "node_modules/ava/cli.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "author": "tusharmath@gmail.com",
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.2.0",
-    "reactive-storage": "0.8.1",
-    "rx": "^4.0.7",
+    "reactive-storage": "^0.8.1"
     "seamless-immutable": "^5.0.1"
   },
   "peerDependencies": {
     "react-dom": "^0.14.3",
-    "react": "^0.14.3"
+    "react": "^0.14.3",
+    "rx": "^4.0.7"
   },
   "devDependencies": {
     "ava": "^0.11.0",
     "react-dom": "^0.14.3",
-    "react": "^0.14.3"
+    "semantic-release": "^4.3.5",
+    "rx": "^4.0.7"
   },
-  "repository": "https://github.com/tusharmath/react-announce-size",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tusharmath/react-announce-size.git"
+  },
   "keywords": [
     "decorators",
     "declarative",
@@ -42,5 +46,10 @@
     "dom",
     "resize",
     "scroll"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
