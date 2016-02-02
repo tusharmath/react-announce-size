@@ -8,7 +8,7 @@ import test from 'ava'
 import _ from 'lodash'
 const {onNext} = ReactiveTest
 
-import {createSizeStore} from './index'
+import {create, createSizeStore} from './index'
 
 const noop = () => function () {
 }
@@ -46,7 +46,7 @@ test(t => {
   })
   const scheduler = new TestScheduler()
   const resize = createResizeStream(scheduler)
-  const store = createSizeStore({getResizeStream: () => resize, findDOMNode})
+  const store = create({getResizeStream: () => resize, findDOMNode})
   store.sync().onNext({event: 'WILL_MOUNT'})
   store.sync().onNext({event: 'DID_MOUNT'})
   store.getStream().subscribe(x => out.push(x))
@@ -76,7 +76,7 @@ test('unmount', t => {
     onNext(800),
     onNext(900)
   )
-  const store = createSizeStore({getResizeStream: () => resize, findDOMNode})
+  const store = create({getResizeStream: () => resize, findDOMNode})
   store.getStream().subscribe(x => out.push(x))
   store.sync().onNext({event: 'WILL_MOUNT'})
   store.sync().onNext({event: 'DID_MOUNT'})
@@ -93,4 +93,8 @@ test('unmount', t => {
     {top: 105, bottom: 120, left: 107, right: 100},
     {top: 105, bottom: 120, left: 108, right: 100}
   ])
+})
+
+test('alias:createSizeStore', t => {
+  t.is(create, createSizeStore)
 })
