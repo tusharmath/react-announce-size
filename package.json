@@ -19,9 +19,10 @@
   },
   "devDependencies": {
     "ava": "^0.11.0",
+    "cz-conventional-changelog": "^1.1.5",
     "react-dom": "^0.14.3",
-    "semantic-release": "^4.3.5",
-    "rx": "^4.0.7"
+    "rx": "^4.0.7",
+    "semantic-release": "^4.3.5"
   },
   "repository": {
     "type": "git",
