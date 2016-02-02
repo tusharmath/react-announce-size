@@ -5,7 +5,6 @@
 'use strict'
 import {TestScheduler, ReactiveTest} from 'rx'
 import test from 'ava'
-import _ from 'lodash'
 const {onNext} = ReactiveTest
 
 import {create, createSizeStore} from './index'
@@ -15,7 +14,7 @@ const noop = () => function () {
 const getBoundingClientRectValues = function * () {
   const createClientRect = (i) => {
     const C = noop()
-    _.assign(C.prototype, i)
+    Object.assign(C.prototype, i)
     return new C()
   }
   yield * [
