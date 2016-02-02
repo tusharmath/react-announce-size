@@ -9,9 +9,9 @@
   "author": "tusharmath@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^3.10.1",
+    "lodash": "^4.2.0",
     "reactive-storage": "0.x",
-    "seamless-immutable": "^4.1.1"
+    "seamless-immutable": "^5.0.1"
   },
   "peerDependencies": {
     "react-dom": "^0.14.3",
@@ -19,10 +19,7 @@
     "rx": "^4.0.7"
   },
   "devDependencies": {
-    "rx": "^4.0.7",
-    "ava": "^0.8.0",
-    "cz-conventional-changelog": "^1.1.5",
-    "react": "^0.14.3",
+    "ava": "^0.11.0",
     "react-dom": "^0.14.3",
     "semantic-release": "^4.3.5"
   },
