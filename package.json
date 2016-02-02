@@ -21,7 +21,8 @@
   "devDependencies": {
     "ava": "^0.11.0",
     "react-dom": "^0.14.3",
-    "semantic-release": "^4.3.5"
+    "semantic-release": "^4.3.5",
+    "rx": "^4.0.7"
   },
   "repository": {
     "type": "git",
