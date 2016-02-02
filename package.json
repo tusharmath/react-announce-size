@@ -9,7 +9,7 @@
   "author": "tusharmath@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "reactive-storage": "^0.8.1",
+    "reactive-storage": "^0.9.0",
     "seamless-immutable": "^5.0.1"
   },
   "peerDependencies": {
