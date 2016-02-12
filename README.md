@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/tusharmath/react-announce-size.svg?branch=master)](https://travis-ci.org/tusharmath/react-announce-size)
 [![npm](https://img.shields.io/npm/v/react-announce-size.svg)](react-announce-size)
 
-a [react-announce](https://github.com/tusharmath/react-announce) declarative that exposes component size as a stream.
+a [react-announce](https://github.com/tusharmath/react-announce) a declarative that dispatches `RESIZE` event on the component's stream.
 
 
 ## Installation
@@ -11,20 +11,24 @@ npm i react-announce-size --save
 ```
 
 ## Usage
-Say I need to set the width of something that has `position: fixed` equal to that of its parent container. I can do this using this module + the ever-useful [@connect](https://travis-ci.org/tusharmath/react-announce-connect) declarative.
+
 
 
 ```javascript
-import {createSizeStream} from 'react-announce-size'
-import {hydrate} from 'react-announce-hydrate'
-import {connect} from 'react-announce-connect'
+import {resize} from 'react-announce-size'
+import {asStream} from 'react-announce'
 import {Component} from 'react'
+import {Subject} from 'rx'
 
 /*
 The decorator will automatically dispatch the size of `Container` component whenever the screen size changes or the component itself is re-rendered.
 */
-const toolbar = createSizeStream()
-@hydrate([toolbar.sync()])
+
+const observer = new Rx.Subject()
+
+
+@resize
+@asStream(observer)
 class Container extends Component {
   render () {
     return (
@@ -36,18 +40,10 @@ class Container extends Component {
   }
 }
 
-@connect({
-  size: toolbar.getStream()
-})
-class StickyTop extends Component {
-  render () {
-    const {left, right} = this.state
-    return (
-      <div style={{position: 'fixed', top: 0, left, right}}>
-        <span>STICKY PEOPLE</span>
-      </div>
-    )
-  }
-}
+
+observer.subscribe(x => console.log(x))
+/* OUTPUT:
+ * {event: 'RESIZE', component: Container{}, args: [{top:0, bottom ...}] } 
+ */
 
 ```
