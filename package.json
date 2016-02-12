@@ -50,5 +50,8 @@
   },
   "dependencies": {
     "react-announce": "^1.0.1"
+  },
+  "publishConfig": {
+    "tag": "next"
   }
 }
