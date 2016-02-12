@@ -29,13 +29,6 @@ const getBoundingClientRectValues = function * () {
     createClientRect({top: 105, bottom: 120, left: 108, right: 100})
   ]
 }
-const createResizeStream = x => x
-  .createHotObservable(
-    onNext(100, null),
-    onNext(200, null),
-    onNext(300, null),
-    onNext(400, null)
-  )
 
 test(t => {
   const out = []
@@ -44,7 +37,12 @@ test(t => {
     getBoundingClientRect: () => boundingClientRect.next().value
   })
   const scheduler = new TestScheduler()
-  const resize = createResizeStream(scheduler)
+  const resize = scheduler.createHotObservable(
+    onNext(100, null),
+    onNext(200, null),
+    onNext(300, null),
+    onNext(400, null)
+  )
   const store = create({getResizeStream: () => resize, findDOMNode})
   store.sync().onNext({event: 'WILL_MOUNT'})
   store.sync().onNext({event: 'DID_MOUNT'})
