@@ -47,5 +47,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "react-announce": "^1.0.1"
   }
 }
