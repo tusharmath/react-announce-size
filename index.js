@@ -8,6 +8,7 @@ const createStoreAsStream = require('reactive-storage').createStoreStream
 const ReactDOM = require('react-dom')
 const Rx = require('rx')
 const Seamless = require('seamless-immutable')
+const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
 
 // TODO: Add better tests for using global functions
 
@@ -37,7 +38,7 @@ exports.createSizeStore = exports.create = params => {
     .withLatestFrom(componentStream.pluck('event'), (size, event) => ({size, event}))
     .filter(x => x.event !== 'WILL_UNMOUNT')
     .pluck('size')
-    .subscribe(size => sizeStore.set(x => x.merge(pick(size, ['top', 'bottom', 'left', 'right', 'height', 'width']))))
+    .subscribe(size => sizeStore.set(x => x.merge(pick(size, PROPS))))
   return {
     getStream: () => sizeStore.getStream().filter(x => x.top),
     sync: () => componentStream
