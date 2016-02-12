@@ -1,6 +1,6 @@
 # react-announce-size
-[![Build Status](https://travis-ci.org/tusharmath/react-announce-size.svg?branch=master)](https://travis-ci.org/tusharmath/react-announce-size)
-[![npm](https://img.shields.io/npm/v/react-announce-size.svg)](react-announce-size)
+[![Build Status][travis-icon]][travis-build]
+[![npm][npm-version-icon]][npm]
 
 A [react-announce](https://github.com/tusharmath/react-announce) based decorator that dispatches a custom event — `RESIZE`, on the component's stream whenever there is a real change in size.
 
@@ -47,3 +47,8 @@ observer.subscribe(x => console.log(x))
   **/
 
 ```
+
+[travis-icon]: https://travis-ci.org/tusharmath/react-announce-size.svg?branch=master
+[travis-build]: https://travis-ci.org/tusharmath/react-announce-size
+[npm-version-icon]: https://img.shields.io/npm/v/react-announce-size.svg
+[npm]: https://www.npmjs.com/package/react-announce-size
