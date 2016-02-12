@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/tusharmath/react-announce-size.svg?branch=master)](https://travis-ci.org/tusharmath/react-announce-size)
 [![npm](https://img.shields.io/npm/v/react-announce-size.svg)](react-announce-size)
 
-a [react-announce](https://github.com/tusharmath/react-announce) declarative that exposes component size as a stream.
+A [react-announce](https://github.com/tusharmath/react-announce) based decorator that dispatches a custom event — `RESIZE`, on the component's stream whenever there is a real change in size.
 
 
 ## Installation
@@ -11,20 +11,19 @@ npm i react-announce-size --save
 ```
 
 ## Usage
-Say I need to set the width of something that has `position: fixed` equal to that of its parent container. I can do this using this module + the ever-useful [@connect](https://travis-ci.org/tusharmath/react-announce-connect) declarative.
-
 
 ```javascript
-import {createSizeStream} from 'react-announce-size'
-import {hydrate} from 'react-announce-hydrate'
-import {connect} from 'react-announce-connect'
+import {size} from 'react-announce-size'
+import {asStream} from 'react-announce'
 import {Component} from 'react'
 
 /*
 The decorator will automatically dispatch the size of `Container` component whenever the screen size changes or the component itself is re-rendered.
 */
-const toolbar = createSizeStream()
-@hydrate([toolbar.sync()])
+
+
+@asStream(observer)
+@size(window) // decorator needs the window object to bind to the resize event
 class Container extends Component {
   render () {
     return (
@@ -35,19 +34,16 @@ class Container extends Component {
     )
   }
 }
+observer.subscribe(x => console.log(x))
 
-@connect({
-  size: toolbar.getStream()
-})
-class StickyTop extends Component {
-  render () {
-    const {left, right} = this.state
-    return (
-      <div style={{position: 'fixed', top: 0, left, right}}>
-        <span>STICKY PEOPLE</span>
-      </div>
-    )
-  }
-}
+/** OUTPUT
+
+  Object {component: Container, event: "WILL_MOUNT", args: Array[]}
+  Object {component: Container, event: "DID_MOUNT", args: Array[]}
+  Object {component: Container, event: "RESIZE", args: Array[1]}
+  Object {component: Container, event: "RESIZE", args: Array[1]}
+  ...
+
+  **/
 
 ```
