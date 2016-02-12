@@ -7,7 +7,7 @@ import {TestScheduler, ReactiveTest} from 'rx'
 import test from 'ava'
 const {onNext} = ReactiveTest
 
-import {create, createSizeStore} from './index'
+import {create, createSizeStore} from './../index'
 
 const noop = () => function () {
 }
