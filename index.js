@@ -44,7 +44,7 @@ e.getComponentSizeStream = (ReactDOM, resize, component) => component
 e.dispatchSize = x => x.component.dispatch('RESIZE', x.size)
 
 e.bindToStream = (d, stream, window) => {
-  const resize = d.getResizeStream(window)
+  const resize = d.getResizeStream(window).startWith({})
   const component = e.getComponentStream(stream)
   const componentSizeStream = e.getComponentSizeStream(d.ReactDOM, resize, component)
   return componentSizeStream.withLatestFrom(component, e.select)
