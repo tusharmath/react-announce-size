@@ -7,6 +7,7 @@
 const createStoreAsStream = require('reactive-storage').createStoreStream
 const ReactDOM = require('react-dom')
 const Rx = require('rx')
+const RECT_PROPS = require('./src/RECT_PROPS')
 const Seamless = require('seamless-immutable')
 
 // TODO: Add better tests for using global functions
@@ -22,9 +23,9 @@ const pick = (obj, keys) => {
     .forEach(x => out[x] = obj[x])
   return out
 }
-exports.createSizeStore = exports.create = params => {
-const RECT_PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
+
 const pickRectProps = (size) => pick(size, RECT_PROPS)
+exports.createSizeStore = exports.create = params => {
   const i = Object.assign({}, defaultParams, params)
   const sizeStore = createStoreAsStream(new Seamless({}))
   const componentStream = new Rx.Subject()
