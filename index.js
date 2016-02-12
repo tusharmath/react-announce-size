@@ -23,6 +23,8 @@ const pick = (obj, keys) => {
   return out
 }
 exports.createSizeStore = exports.create = params => {
+const RECT_PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
+const pickRectProps = (size) => pick(size, RECT_PROPS)
   const i = Object.assign({}, defaultParams, params)
   const sizeStore = createStoreAsStream(new Seamless({}))
   const componentStream = new Rx.Subject()
@@ -37,7 +39,7 @@ exports.createSizeStore = exports.create = params => {
     .withLatestFrom(componentStream.pluck('event'), (size, event) => ({size, event}))
     .filter(x => x.event !== 'WILL_UNMOUNT')
     .pluck('size')
-    .subscribe(size => sizeStore.set(x => x.merge(pick(size, ['top', 'bottom', 'left', 'right', 'height', 'width']))))
+    .subscribe(size => sizeStore.set(x => x.merge(pickRectProps(size))))
   return {
     getStream: () => sizeStore.getStream().filter(x => x.top),
     sync: () => componentStream
