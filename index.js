@@ -51,9 +51,11 @@ e.bindToStream = (d, stream, window) => {
     .subscribe(d.dispatchSize)
 }
 
-e.size = createDeclarative(function (stream, dispose, window) {
-  dispose(bindToStream(e, stream, window))
-})
+e.declarative = function (stream, dispose, window) {
+  dispose(e.bindToStream(e, stream, window))
+}
+
+e.size = createDeclarative(e.declarative)
 
 // TODO: Deprecate functionality
 e.createSizeStore = e.create = params => {
