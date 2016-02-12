@@ -8,10 +8,6 @@
   },
   "author": "tusharmath@gmail.com",
   "license": "ISC",
-  "dependencies": {
-    "reactive-storage": "0.x",
-    "seamless-immutable": "^5.0.1"
-  },
   "peerDependencies": {
     "react-dom": "^0.14.3",
     "react": "^0.14.3",

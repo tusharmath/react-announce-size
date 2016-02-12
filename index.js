@@ -4,10 +4,8 @@
 
 'use strict'
 
-const createStoreAsStream = require('reactive-storage').createStoreStream
 const ReactDOM = require('react-dom')
 const Rx = require('rx')
-const Seamless = require('seamless-immutable')
 const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
 
 // TODO: Add better tests for using global functions
@@ -23,9 +21,12 @@ const pick = (obj, keys) => {
     .forEach(x => out[x] = obj[x])
   return out
 }
+
+const rectToString = x => PROPS.map(i => x[i]).join(':')
+
 exports.createSizeStore = exports.create = params => {
   const i = Object.assign({}, defaultParams, params)
-  const sizeStore = createStoreAsStream(new Seamless({}))
+  const sizeStore = new Rx.BehaviorSubject({})
   const componentStream = new Rx.Subject()
   const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
   const didUpdate = componentStream.filter(x => x.event === 'DID_UPDATE')
@@ -38,9 +39,9 @@ exports.createSizeStore = exports.create = params => {
     .withLatestFrom(componentStream.pluck('event'), (size, event) => ({size, event}))
     .filter(x => x.event !== 'WILL_UNMOUNT')
     .pluck('size')
-    .subscribe(size => sizeStore.set(x => x.merge(pick(size, PROPS))))
+    .subscribe(size => sizeStore.onNext(pick(size, PROPS)))
   return {
-    getStream: () => sizeStore.getStream().filter(x => x.top),
+    getStream: () => sizeStore.distinctUntilChanged(rectToString).filter(x => x.top),
     sync: () => componentStream
   }
 }
