@@ -23,6 +23,7 @@ test('bindToStream', t => {
     {top: 1, left: 0},
     {top: 1, left: 0},
     {top: 2, left: 0},
+    {top: 2, left: 0},
     {top: 2, left: 0}
   ]
   const stream = sh.createHotObservable(
@@ -39,9 +40,6 @@ test('bindToStream', t => {
         onNext(210, {}),
         onNext(212, {}),
         onNext(214, {})
-    ),
-    getComponentSizeStream: x => sh.createHotObservable(
-        onNext(210, {a: 1, b: 1})
     )
   }
 
@@ -49,6 +47,6 @@ test('bindToStream', t => {
   sh.start()
   t.same(out, [
     { size: { top: 2, left: 0 }, component: { props: 1 } },
-    { size: { top: 1, left: 0 }, component: { props: 1 } }
+    { size: { top: 1, left: 0 }, component: { props: 2 } }
   ])
 })
