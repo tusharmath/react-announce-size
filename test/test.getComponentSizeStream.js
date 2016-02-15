@@ -2,7 +2,7 @@ import { TestScheduler, ReactiveTest } from 'rx'
 import test from 'ava'
 const {onNext} = ReactiveTest
 
-import e from '../index'
+import e from '../src/decorators'
 
 test(t => {
 

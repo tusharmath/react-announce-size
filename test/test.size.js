@@ -8,11 +8,7 @@ import { TestScheduler, ReactiveTest } from 'rx'
 import test from 'ava'
 const {onNext} = ReactiveTest
 
-import e from '../index'
-
-test('ReactDOM', t => {
-  t.same(e.ReactDOM, require('react-dom'))
-})
+import e from '../src/decorators'
 
 test('bindToStream', t => {
 
