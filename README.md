@@ -23,7 +23,7 @@ The decorator will automatically dispatch the size of `Container` component when
 
 
 @asStream(observer)
-@size(window) // decorator needs the window object to bind to the resize event
+@size
 class Container extends Component {
   render () {
     return (
