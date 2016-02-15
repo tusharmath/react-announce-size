@@ -9,7 +9,6 @@ e.ReactDOM = ReactDOM
 const Rx = require('rx')
 const createDeclarative = require('react-announce').createDeclarative
 const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
-
 // TODO: Add better tests for using global functions
 
 const defaultParams = {
@@ -25,7 +24,6 @@ const pick = (obj, keys) => {
   return out
 }
 
-
 e.select = (size, component) => ({size, component})
 
 e.rectToString = x => PROPS.map(i => x[i]).join(':')
@@ -36,8 +34,12 @@ e.getComponentStream = x => x
 
 e.getResizeStream = window => Rx.Observable.fromEvent(window, 'resize')
 
-e.getComponentSizeStream = (ReactDOM, resize, component) => component
-    .combineLatest(resize, a => a)
+e.getConsolidatedSizeStream = function () {
+  const streams = [].slice.call(arguments)
+  return Rx.Observable.combineLatest.apply(null, streams, x => x)
+}
+
+e.getComponentSizeStream = (ReactDOM, component) => component
     .map(x => ReactDOM.findDOMNode(x).getBoundingClientRect())
     .distinctUntilChanged(e.rectToString)
 
@@ -46,7 +48,8 @@ e.dispatchSize = x => x.component.dispatch('RESIZE', x.size)
 e.bindToStream = (d, stream, window) => {
   const resize = d.getResizeStream(window).startWith({})
   const component = e.getComponentStream(stream)
-  const componentSizeStream = e.getComponentSizeStream(d.ReactDOM, resize, component)
+  const consolidatedStreams =  e.getConsolidatedSizeStream(component, resize)
+  const componentSizeStream = e.getComponentSizeStream(d.ReactDOM, consolidatedStreams)
   return componentSizeStream.withLatestFrom(component, e.select)
     .subscribe(d.dispatchSize)
 }
