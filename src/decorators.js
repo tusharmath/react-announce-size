@@ -6,55 +6,41 @@
 const Rx = require('rx')
 const createDeclarative = require('react-announce').createDeclarative
 const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
-// TODO: Remove the word STREAM from all functions and file names
-
-const defaultParams = {
-  getResizeStream: () => Rx.Observable.fromEvent(window, 'resize'),
-  findDOMNode: x => ReactDOM.findDOMNode(x)
-}
 
 const e = module.exports = (window, ReactDOM) => ({
     size: createDeclarative(function (stream, dispose) {
-      dispose(e.bindToStream(ReactDOM, window, stream))
+      dispose(e.size(ReactDOM, window, stream))
     })
 })
 
-e.select = (size, component) => ({size, component})
-
-e.rectToString = x => PROPS.map(i => x[i]).join(':')
-
-e.getComponentStream = x => x
+e.getComponent = stream => stream
     .filter(x => ['DID_MOUNT', 'DID_UPDATE'].indexOf(x.event) > -1)
     .pluck('component')
 
-e.getResizeStream = window => Rx.Observable.fromEvent(window, 'resize')
-e.getScrollStream = window => Rx.Observable.fromEvent(window, 'scroll')
-
-e.createComponent = function () {
-  const streams = [].slice.call(arguments)
-  return Rx.Observable.combineLatest.apply(null, streams, x => x)
-}
+e.getWindowChangeEvents = window => Rx
+    .Observable
+    .combineLatest(
+      Rx.Observable.fromEvent(window, 'resize'),
+      Rx.Observable.fromEvent(window, 'scroll')
+)
 
 e.getComponentSize = (ReactDOM, component) => component
-    .map(x => ReactDOM.findDOMNode(x).getBoundingClientRect())
-    .distinctUntilChanged(e.rectToString)
+    .map(x => ReactDOM.findDOMNode(x))
+    .map(x => x.getBoundingClientRect())
+    .distinctUntilChanged(x => PROPS.map(p => x[p]).join(':'))
 
-e.dispatchSize = x => x.component.dispatch('RESIZE', x.size)
+e.dispatchSize = (size, component) => size
+    .withLatestFrom(component, (size, component) => ({size, component}))
+    .subscribe(x => x.component.dispatch('RESIZE', x.size))
 
-e.getSourceStreams = (d, stream, window) => {
-  const resize = d.getResizeStream(window).startWith({})
-  const component = e.getComponentStream(stream)
-  return {resize, component}
-}
+e._size = (dispatchSize, source) => dispatchSize(
+    source.size.combineLatest(source.window, x => x),
+    source.component
+)
 
-e.bindToStream = (d, stream, window) => {
-  const src = e.getSourceStreams(d, stream, window)
-  const component = e.createComponent(src.component, src.resize)
-  const componentSizeStream = e.getComponentSize(d.ReactDOM, component)
-  return componentSizeStream.withLatestFrom(src.component, e.select)
-    .subscribe(d.dispatchSize)
-}
-
-e.declarative = function (stream, dispose, window) {
-  dispose(e.bindToStream(e, stream, window))
+e.size = (ReactDOM, _window, stream) => {
+  const component = e.getComponent(stream)
+  const size = e.getComponentSize(ReactDOM, component)
+  const window = e.getWindowChangeEvents(_window)
+  return e._size(e.dispatchSize, {component, size, window})
 }
