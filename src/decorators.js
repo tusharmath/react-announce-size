@@ -20,9 +20,9 @@ e.getComponent = stream => stream
 e.getWindowChangeEvents = window => Rx
     .Observable
     .combineLatest(
-      Rx.Observable.fromEvent(window, 'resize'),
-      Rx.Observable.fromEvent(window, 'scroll')
-  ).startWith(window)
+      Rx.Observable.fromEvent(window, 'resize').startWith(null),
+      Rx.Observable.fromEvent(window, 'scroll').startWith(null)
+  )
 
 e.getComponentSize = (ReactDOM, component) => component
     .map(x => ReactDOM.findDOMNode(x))

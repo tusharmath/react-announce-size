@@ -9,7 +9,7 @@ const createWindow = () => {
 
   return {
     listeners,
-    addEventListener: x => listeners.push(x)
+    addEventListener: (ev, cb) => listeners.push({ev, cb})
   }
 }
 
@@ -21,10 +21,9 @@ test(t => {
   e.size(ReactDOM, window, stream)
 })
 
-test('getWindowChangeEvents:initial', t => {
+test('getWindowChangeEvents', t => {
   const out = []
   const window = createWindow()
   e.getWindowChangeEvents(window).subscribe(x => out.push(x))
-  t.is(out.length, 1)
-  t.is(out[0], window)
+  t.same(out, [[ null, null ]])
 })
