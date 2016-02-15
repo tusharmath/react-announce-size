@@ -33,6 +33,7 @@ e.getComponentStream = x => x
     .pluck('component')
 
 e.getResizeStream = window => Rx.Observable.fromEvent(window, 'resize')
+e.getScrollStream = window => Rx.Observable.fromEvent(window, 'scroll')
 
 e.createComponent = function () {
   const streams = [].slice.call(arguments)
@@ -45,12 +46,17 @@ e.getComponentSizeStream = (ReactDOM, component) => component
 
 e.dispatchSize = x => x.component.dispatch('RESIZE', x.size)
 
-e.bindToStream = (d, stream, window) => {
+e.getSourceStreams = (d, stream, window) => {
   const resize = d.getResizeStream(window).startWith({})
   const component = e.getComponentStream(stream)
-  const consolidatedStreams =  e.createComponent(component, resize)
+  return {resize, component}
+}
+
+e.bindToStream = (d, stream, window) => {
+  const src = e.getSourceStreams(d, stream, window)
+  const consolidatedStreams = e.createComponent(src.component, src.resize)
   const componentSizeStream = e.getComponentSizeStream(d.ReactDOM, consolidatedStreams)
-  return componentSizeStream.withLatestFrom(component, e.select)
+  return componentSizeStream.withLatestFrom(src.component, e.select)
     .subscribe(d.dispatchSize)
 }
 
