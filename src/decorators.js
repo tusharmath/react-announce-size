@@ -13,17 +13,9 @@ const defaultParams = {
   findDOMNode: x => ReactDOM.findDOMNode(x)
 }
 
-const pick = (obj, keys) => {
-  const out = {}
-  keys
-    .filter(x => obj[x])
-    .forEach(x => out[x] = obj[x])
-  return out
-}
-
 const e = module.exports = (window, ReactDOM) => ({
     size: createDeclarative(function (stream, dispose) {
-      dispose(e.bindToStream(ReactDOM, window, stream, dispose))
+      dispose(e.bindToStream(ReactDOM, window, stream))
     })
 })
 
