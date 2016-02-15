@@ -9,7 +9,7 @@ e.ReactDOM = ReactDOM
 const Rx = require('rx')
 const createDeclarative = require('react-announce').createDeclarative
 const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
-// TODO: Add better tests for using global functions
+// TODO: Remove the word STREAM from all functions and file names
 
 const defaultParams = {
   getResizeStream: () => Rx.Observable.fromEvent(window, 'resize'),
@@ -34,7 +34,7 @@ e.getComponentStream = x => x
 
 e.getResizeStream = window => Rx.Observable.fromEvent(window, 'resize')
 
-e.getConsolidatedSizeStream = function () {
+e.createComponent = function () {
   const streams = [].slice.call(arguments)
   return Rx.Observable.combineLatest.apply(null, streams, x => x)
 }
@@ -48,7 +48,7 @@ e.dispatchSize = x => x.component.dispatch('RESIZE', x.size)
 e.bindToStream = (d, stream, window) => {
   const resize = d.getResizeStream(window).startWith({})
   const component = e.getComponentStream(stream)
-  const consolidatedStreams =  e.getConsolidatedSizeStream(component, resize)
+  const consolidatedStreams =  e.createComponent(component, resize)
   const componentSizeStream = e.getComponentSizeStream(d.ReactDOM, consolidatedStreams)
   return componentSizeStream.withLatestFrom(component, e.select)
     .subscribe(d.dispatchSize)
