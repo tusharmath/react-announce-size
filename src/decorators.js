@@ -7,11 +7,11 @@ const Rx = require('rx')
 const createDeclarative = require('react-announce').createDeclarative
 const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
 
-const e = module.exports = (window, ReactDOM) => ({
-    size: createDeclarative(function (stream, dispose) {
+const e = module.exports = (window, ReactDOM) => createDeclarative(
+    function (stream, dispose) {
       dispose(e.size(ReactDOM, window, stream))
-    })
-})
+    }
+)
 
 e.getComponent = stream => stream
     .filter(x => ['DID_MOUNT', 'DID_UPDATE'].indexOf(x.event) > -1)
@@ -22,7 +22,7 @@ e.getWindowChangeEvents = window => Rx
     .combineLatest(
       Rx.Observable.fromEvent(window, 'resize'),
       Rx.Observable.fromEvent(window, 'scroll')
-)
+  ).startWith(window)
 
 e.getComponentSize = (ReactDOM, component) => component
     .map(x => ReactDOM.findDOMNode(x))
