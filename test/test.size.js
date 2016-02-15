@@ -27,3 +27,28 @@ test('getWindowChangeEvents', t => {
   e.getWindowChangeEvents(window).subscribe(x => out.push(x))
   t.same(out, [[ null, null ]])
 })
+
+test('getComponentSize', t => {
+  const rects = [
+    {top: 1, left: 100},
+    {top: 2, left: 100},
+    {top: 2, left: 100}
+  ]
+  const ReactDOM = {findDOMNode: () => ({getBoundingClientRect: () => rects.shift()})}
+  const out = []
+  const sh = new TestScheduler()
+  const component = sh.createHotObservable(
+    onNext(211, 'A')
+  )
+  const window = sh.createHotObservable(
+    onNext(215, 'B'),
+    onNext(225, 'B'),
+    onNext(235, 'B')
+  )
+  e.getComponentSize(ReactDOM, component, window).subscribe(x => out.push(x))
+  sh.start()
+  t.same(out, [
+    { top: 1, left: 100 },
+    { top: 2, left: 100 }
+  ])
+})

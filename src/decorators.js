@@ -22,9 +22,10 @@ e.getWindowChangeEvents = window => Rx
     .combineLatest(
       Rx.Observable.fromEvent(window, 'resize').startWith(null),
       Rx.Observable.fromEvent(window, 'scroll').startWith(null)
-  )
+)
 
-e.getComponentSize = (ReactDOM, component) => component
+e.getComponentSize = (ReactDOM, component, window) => component
+    .combineLatest(window, x => x)
     .map(x => ReactDOM.findDOMNode(x))
     .map(x => x.getBoundingClientRect())
     .distinctUntilChanged(x => PROPS.map(p => x[p]).join(':'))
@@ -40,7 +41,7 @@ e._size = (dispatchSize, source) => dispatchSize(
 
 e.size = (ReactDOM, _window, stream) => {
   const component = e.getComponent(stream)
-  const size = e.getComponentSize(ReactDOM, component)
   const window = e.getWindowChangeEvents(_window)
+  const size = e.getComponentSize(ReactDOM, component, window)
   return e._size(e.dispatchSize, {component, size, window})
 }
