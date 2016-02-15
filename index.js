@@ -65,26 +65,3 @@ e.declarative = function (stream, dispose, window) {
 }
 
 e.size = createDeclarative(e.declarative)
-
-// TODO: Deprecate functionality
-e.createSizeStore = e.create = params => {
-  const i = Object.assign({}, defaultParams, params)
-  const sizeStore = new Rx.BehaviorSubject({})
-  const componentStream = new Rx.Subject()
-  const didMount = componentStream.filter(x => x.event === 'DID_MOUNT')
-  const didUpdate = componentStream.filter(x => x.event === 'DID_UPDATE')
-  const resizeStream = i.getResizeStream().startWith({})
-
-  Rx.Observable
-    .merge(didMount, didUpdate)
-    .map(x => i.findDOMNode(x.component))
-    .combineLatest(resizeStream, a => a.getBoundingClientRect())
-    .withLatestFrom(componentStream.pluck('event'), (size, event) => ({size, event}))
-    .filter(x => x.event !== 'WILL_UNMOUNT')
-    .pluck('size')
-    .subscribe(size => sizeStore.onNext(pick(size, PROPS)))
-  return {
-    getStream: () => sizeStore.distinctUntilChanged(e.rectToString).filter(x => x.top),
-    sync: () => componentStream
-  }
-}
