@@ -43,7 +43,7 @@ e.createComponent = function () {
   return Rx.Observable.combineLatest.apply(null, streams, x => x)
 }
 
-e.getComponentSizeStream = (ReactDOM, component) => component
+e.getComponentSize = (ReactDOM, component) => component
     .map(x => ReactDOM.findDOMNode(x).getBoundingClientRect())
     .distinctUntilChanged(e.rectToString)
 
@@ -57,8 +57,8 @@ e.getSourceStreams = (d, stream, window) => {
 
 e.bindToStream = (d, stream, window) => {
   const src = e.getSourceStreams(d, stream, window)
-  const consolidatedStreams = e.createComponent(src.component, src.resize)
-  const componentSizeStream = e.getComponentSizeStream(d.ReactDOM, consolidatedStreams)
+  const component = e.createComponent(src.component, src.resize)
+  const componentSizeStream = e.getComponentSize(d.ReactDOM, component)
   return componentSizeStream.withLatestFrom(src.component, e.select)
     .subscribe(d.dispatchSize)
 }

@@ -28,7 +28,7 @@ test(t => {
   )
 
   const ReactDOM = {findDOMNode: x => node}
-  e.getComponentSizeStream(ReactDOM, source).subscribe(x => out.push(x))
+  e.getComponentSize(ReactDOM, source).subscribe(x => out.push(x))
   sh.start()
   t.same(out, [
     { top: 1, left: 0 },
