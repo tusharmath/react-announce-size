@@ -6,18 +6,7 @@
 const Rx = require('rx')
 const createDeclarative = require('react-announce').createDeclarative
 const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
-
-// TODO : Create another package
-const targs = function () {
-  const toArr = x => [].slice.call(x)
-  const keys = toArr(arguments)
-  return function () {
-    const out = {}
-    const values = toArr(arguments)
-    values.forEach((x, i) => out[keys[i]] = x)
-    return out
-  }
-}
+const targs = require('argtoob')
 
 const e = module.exports = (window, ReactDOM) => createDeclarative(
     function (stream, dispose) {
@@ -65,7 +54,7 @@ e.getComponentSize = (ReactDOM, component, window) => component
     .distinctUntilChanged(x => PROPS.map(p => x.rect[p]).join(':'))
 
 e.dispatchSize = (size, component) => size
-    .withLatestFrom(component, (size, component) => ({size, component}))
+    .withLatestFrom(component, targs('size', 'component'))
     .subscribe(x => x.component.dispatch('RESIZE', x.size.rect, x.size.window.size, x.size.window.scroll))
 
 e._size = (dispatchSize, source) => dispatchSize(
