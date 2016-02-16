@@ -9,7 +9,11 @@ const createWindow = () => {
 
   return {
     listeners,
-    addEventListener: (ev, cb) => listeners.push({ev, cb})
+    addEventListener: (ev, cb) => listeners.push({ev, cb}),
+    innerWidth: 100,
+    innerHeight: 200,
+    scrollX: 9000,
+    scrollY: 9001
   }
 }
 
@@ -25,7 +29,12 @@ test('getWindowChangeEvents', t => {
   const out = []
   const window = createWindow()
   e.getWindowChangeEvents(window).subscribe(x => out.push(x))
-  t.same(out, [[ null, null ]])
+  t.same(out, [
+    {
+      scroll: {scrollX: 9000, scrollY: 9001},
+      size: {innerWidth: 100, innerHeight: 200}
+    }
+  ])
 })
 
 test('getComponentSize', t => {

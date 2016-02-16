@@ -13,6 +13,12 @@ const e = module.exports = (window, ReactDOM) => createDeclarative(
     }
 )
 
+e.pick = (ob, keys) => {
+  const out = {}
+  keys.forEach(x => out[x] = ob[x])
+  return out
+}
+
 e.getComponent = stream => stream
     .filter(x => ['DID_MOUNT', 'DID_UPDATE'].indexOf(x.event) > -1)
     .pluck('component')
@@ -20,8 +26,18 @@ e.getComponent = stream => stream
 e.getWindowChangeEvents = window => Rx
     .Observable
     .combineLatest(
-      Rx.Observable.fromEvent(window, 'resize').startWith(null),
-      Rx.Observable.fromEvent(window, 'scroll').startWith(null)
+
+      Rx.Observable
+        .fromEvent(window, 'resize')
+        .startWith(window)
+        .map(x => e.pick(x, ['innerWidth', 'innerHeight'])),
+
+      Rx.Observable
+        .fromEvent(window, 'scroll')
+        .startWith(window)
+        .map(x => e.pick(x, ['scrollY', 'scrollX'])),
+
+      (size, scroll) => ({scroll, size})
 )
 
 e.getComponentSize = (ReactDOM, component, window) => component
