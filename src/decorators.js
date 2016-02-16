@@ -7,6 +7,18 @@ const Rx = require('rx')
 const createDeclarative = require('react-announce').createDeclarative
 const PROPS = ['top', 'bottom', 'left', 'right', 'height', 'width']
 
+// TODO : Create another package
+const targs = function () {
+  const toArr = x => [].slice.call(x)
+  const keys = toArr(arguments)
+  return function () {
+    const out = {}
+    const values = toArr(arguments)
+    values.forEach((x, i) => out[keys[i]] = x)
+    return out
+  }
+}
+
 const e = module.exports = (window, ReactDOM) => createDeclarative(
     function (stream, dispose) {
       dispose(e.size(ReactDOM, window, stream))
@@ -37,7 +49,7 @@ e.getWindowChangeEvents = window => Rx
         .startWith(window)
         .map(x => e.pick(x, ['scrollY', 'scrollX'])),
 
-      (size, scroll) => ({scroll, size})
+      targs('size', 'scroll')
 )
 
 e.getComponentSize = (ReactDOM, component, window) => component
