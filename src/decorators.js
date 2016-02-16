@@ -52,11 +52,17 @@ e.getWindowChangeEvents = window => Rx
       targs('size', 'scroll')
 )
 
+e.getComponentSizeFromDom = (ReactDOM, component) => ReactDOM
+    .findDOMNode(component)
+    .getBoundingClientRect()
+
 e.getComponentSize = (ReactDOM, component, window) => component
-    .combineLatest(window, x => x)
-    .map(x => ReactDOM.findDOMNode(x))
-    .map(x => x.getBoundingClientRect())
-    .distinctUntilChanged(x => PROPS.map(p => x[p]).join(':'))
+    .combineLatest(window, targs('component', 'window'))
+    .map(x => ({
+        rect: e.getComponentSizeFromDom(ReactDOM, x.component),
+        window: x.window
+    }))
+    .distinctUntilChanged(x => PROPS.map(p => x.rect[p]).join(':'))
 
 e.dispatchSize = (size, component) => size
     .withLatestFrom(component, (size, component) => ({size, component}))

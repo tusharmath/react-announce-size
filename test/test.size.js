@@ -50,14 +50,14 @@ test('getComponentSize', t => {
     onNext(211, 'A')
   )
   const window = sh.createHotObservable(
-    onNext(215, 'B'),
-    onNext(225, 'B'),
-    onNext(235, 'B')
+    onNext(215, 'B0'),
+    onNext(225, 'B1'),
+    onNext(235, 'B2')
   )
   e.getComponentSize(ReactDOM, component, window).subscribe(x => out.push(x))
   sh.start()
   t.same(out, [
-    { top: 1, left: 100 },
-    { top: 2, left: 100 }
+    {window: 'B0', rect: { top: 1, left: 100 }}  ,
+    {window: 'B1', rect: { top: 2, left: 100 }}
   ])
 })
