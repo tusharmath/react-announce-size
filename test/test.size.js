@@ -61,3 +61,22 @@ test('getComponentSize', t => {
     {window: 'B1', rect: { top: 2, left: 100 }}
   ])
 })
+
+test('dispatchSize', t => {
+  const out = []
+  function dispatch (event, rect, size, scroll) {out.push({event, rect, size, scroll})}
+  const sh = new TestScheduler()
+  const size = sh.createHotObservable(
+    onNext(230, {rect: 'rect0', window: {scroll: 'scroll0', size: 'size0'}}),
+    onNext(240, {rect: 'rect1', window: {scroll: 'scroll1', size: 'size1'}})
+  )
+  const component = sh.createHotObservable(
+    onNext(210, {dispatch})
+  )
+  e.dispatchSize(size, component)
+  sh.start()
+  t.same(out, [
+    {event: 'RESIZE', rect: 'rect0', scroll: 'scroll0', size: 'size0'},
+    {event: 'RESIZE', rect: 'rect1', scroll: 'scroll1', size: 'size1'}
+  ])
+})

@@ -66,7 +66,7 @@ e.getComponentSize = (ReactDOM, component, window) => component
 
 e.dispatchSize = (size, component) => size
     .withLatestFrom(component, (size, component) => ({size, component}))
-    .subscribe(x => x.component.dispatch('RESIZE', x.size))
+    .subscribe(x => x.component.dispatch('RESIZE', x.size.rect, x.size.window.size, x.size.window.scroll))
 
 e._size = (dispatchSize, source) => dispatchSize(
     source.size.combineLatest(source.window, x => x),
