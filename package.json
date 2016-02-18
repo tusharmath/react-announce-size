@@ -50,8 +50,5 @@
   "dependencies": {
     "argtoob": "^1.0.0",
     "react-announce": "^1.0.1"
-  },
-  "publishConfig": {
-    "tag": "next"
   }
 }
