@@ -22,6 +22,16 @@ test('size', t => {
   const ReactDOM = {}
   const window = createWindow()
   const stream = sh.createHotObservable()
+  const mock = () => null
+  const a = e(ReactDOM, window, stream)(mock)
+  t.is(a, mock)
+})
+
+test('size', t => {
+  const sh = new TestScheduler()
+  const ReactDOM = {}
+  const window = createWindow()
+  const stream = sh.createHotObservable()
   e.size(ReactDOM, window, stream)
 })
 
