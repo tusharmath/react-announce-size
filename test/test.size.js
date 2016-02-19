@@ -17,7 +17,7 @@ const createWindow = () => {
   }
 }
 
-test(t => {
+test('size', t => {
   const sh = new TestScheduler()
   const ReactDOM = {}
   const window = createWindow()

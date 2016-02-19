@@ -12,7 +12,7 @@ const e = module.exports = (window, ReactDOM) => createDeclarative(
     function (stream, dispose) {
       dispose(e.size(ReactDOM, window, stream))
     }
-)
+)()
 
 e.pick = (ob, keys) => {
   const out = {}
