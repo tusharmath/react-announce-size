@@ -17,7 +17,7 @@
     "ava": "^0.16.0",
     "cz-conventional-changelog": "^1.1.5",
     "rx": "^4.0.7",
-    "semantic-release": "^4.3.5"
+    "semantic-release": "^6.3.2"
   },
   "repository": {
     "type": "git",
