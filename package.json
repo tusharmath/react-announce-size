@@ -9,7 +9,7 @@
   "author": "tusharmath@gmail.com",
   "license": "ISC",
   "peerDependencies": {
-    "react-dom": "^0.14.8",
+    "react-dom": "^15.5.1",
     "react": "^0.14.8",
     "rx": "^4.0.7"
   },
