@@ -1,4 +1,6 @@
 # react-announce-size
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/tusharmath/react-announce-size.svg)](https://greenkeeper.io/)
 [![Build Status][travis-icon]][travis-build]
 [![npm][npm-version-icon]][npm]
 

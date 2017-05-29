@@ -14,10 +14,10 @@
     "rx": "^4.0.7"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
-    "cz-conventional-changelog": "^1.1.5",
+    "ava": "^0.19.1",
+    "cz-conventional-changelog": "^2.0.0",
     "rx": "^4.0.7",
-    "semantic-release": "^4.3.5"
+    "semantic-release": "^6.3.6"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,6 @@
   },
   "dependencies": {
     "argtoob": "^1.0.0",
-    "react-announce": "^2.0.0"
+    "react-announce": "^3.0.0"
   }
 }
